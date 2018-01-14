@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import tkinter as tk
 from PIL import Image, ImageTk
 import random
@@ -5,7 +6,7 @@ import pprint
 import os
 
 
-class Viewer():
+class Viewer:
     def __init__(self, dir):
         self.root = tk.Tk()
         self.root.title('My Pictures')

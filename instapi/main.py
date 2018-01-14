@@ -1,8 +1,9 @@
-from lib.parser import Parser
-from lib.viewer import Viewer
-import time, threading
 import argparse
 import sys
+import threading
+
+from instapi import viewer
+from instapi import parser
 
 
 def parse():
@@ -24,8 +25,8 @@ if __name__ == '__main__':
         print('username or password is empty')
         sys.exit(0)
 
-    parser = Parser(url='https://www.instagram.com', dir='images', username=args.username, password=args.password)
-    viewer = Viewer('images')
+    parser = parser.Parser(url='https://www.instagram.com', dir='images', username=args.username, password=args.password)
+    viewer = viewer.Viewer('images')
 
     parse()
     view()
