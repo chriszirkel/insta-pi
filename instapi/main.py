@@ -6,13 +6,13 @@ from instapi import viewer
 from instapi import parser
 
 
+def view():
+    viewer.view()
+
+
 def parse():
     parser.parse()
     threading.Timer(10, parse).start()
-
-
-def view():
-    viewer.view()
 
 
 if __name__ == '__main__':

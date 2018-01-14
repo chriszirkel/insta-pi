@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from time import sleep
 from selenium import webdriver
 import urllib.request
