@@ -7,5 +7,5 @@ setup(
    author='Chris Zirkel',
    author_email='chris@zirkel.me',
    packages=['instapi'],
-   install_requires=['selenium',],
+   install_requires=['selenium', 'PIL'],
 )
