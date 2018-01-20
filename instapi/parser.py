@@ -18,12 +18,13 @@ class Parser:
     def parse(self):
         print('parse instagram')
         try:
-            # self.options = webdriver.ChromeOptions()
-            # self.options.add_argument('--lang=en')
-            # self.driver = webdriver.Chrome(chrome_options=self.options)
+            # webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.Accept-Language'] = 'en-US'
+            # self.driver = webdriver.PhantomJS()
 
-            webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.Accept-Language'] = 'en-US'
-            self.driver = webdriver.PhantomJS()
+            options = webdriver.ChromeOptions()
+            options.add_argument('--lang=en')
+
+            self.driver = webdriver.Chrome(chrome_options=self.options)
             self.driver.set_window_size(1920, 1080)
             self.driver.implicitly_wait(5)
             self.driver.get(self.url)
