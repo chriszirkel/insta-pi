@@ -24,7 +24,7 @@ class Parser:
             options = webdriver.ChromeOptions()
             options.add_argument('--lang=en')
 
-            self.driver = webdriver.Chrome(chrome_options=self.options)
+            self.driver = webdriver.Chrome(chrome_options=options)
             self.driver.set_window_size(1920, 1080)
             self.driver.implicitly_wait(5)
             self.driver.get(self.url)

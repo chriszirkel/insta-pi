@@ -12,7 +12,7 @@ def view():
 
 def parse():
     parser.parse()
-    threading.Timer(10, parse).start()
+    threading.Timer(3600, parse).start()
 
 
 if __name__ == '__main__':
