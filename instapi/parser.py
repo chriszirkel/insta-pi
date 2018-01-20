@@ -96,10 +96,13 @@ class Parser:
 
         except Exception as e:
             traceback.print_exc()
-            self.driver.save_screenshot('screenshot.png')
+            
+            if self.driver:
+                self.driver.save_screenshot('screenshot.png')
 
         finally:
-            self.driver.close()
+            if self.driver:
+                self.driver.close()
 
     def scroll_to_bottom(self):
         SCROLL_PAUSE_TIME = 1.5
