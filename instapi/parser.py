@@ -19,10 +19,14 @@ class Parser:
             # webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.Accept-Language'] = 'en-US'
             # self.driver = webdriver.PhantomJS()
 
-            options = webdriver.ChromeOptions()
-            options.add_argument('--lang=en')
+            # options = webdriver.ChromeOptions()
+            # options.add_argument('--lang=en')
+            # self.driver = webdriver.Chrome(chrome_options=options)
 
-            self.driver = webdriver.Chrome(chrome_options=options)
+            profile = webdriver.FirefoxProfile()
+            profile.set_preference('intl.accept_languages', 'en')
+            self.driver = webdriver.Firefox()
+
             self.driver.set_window_size(1920, 1080)
             self.driver.implicitly_wait(5)
             self.driver.get(self.url)

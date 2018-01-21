@@ -33,6 +33,9 @@ class Viewer:
         print('%d images loaded' % len(self.images))
 
     def update_image(self):
+        if not self.images:
+            return
+
         random_image = random.choice(self.images)
 
         self.current_image = ImageTk.PhotoImage(Image.open(os.path.join(self.dir, random_image)))
