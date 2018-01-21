@@ -1,10 +1,8 @@
 from time import sleep
 from selenium import webdriver
 import urllib.request
-import re
 import os.path
 import traceback
-import pprint
 
 
 class Parser:
@@ -96,7 +94,7 @@ class Parser:
 
         except Exception as e:
             traceback.print_exc()
-            
+
             if self.driver:
                 self.driver.save_screenshot('screenshot.png')
 
@@ -105,7 +103,7 @@ class Parser:
                 self.driver.close()
 
     def scroll_to_bottom(self):
-        SCROLL_PAUSE_TIME = 1.5
+        SCROLL_PAUSE_TIME = 2
 
         # Get scroll height
         last_height = self.driver.execute_script("return document.body.scrollHeight")
