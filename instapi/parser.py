@@ -50,6 +50,8 @@ class Parser:
                 password.send_keys(self.password)
                 login.click()
 
+            sleep(30)
+
             profile = self.driver.find_element_by_xpath('//a[contains(text(),"Profile")]')
 
             if profile:
@@ -57,7 +59,8 @@ class Parser:
 
             sleep(30)
 
-            saved = self.driver.find_element_by_xpath('//a[contains(string(),"SAVED")]')
+            #saved = self.driver.find_element_by_xpath('//a[contains(string(),"SAVED")]')
+            saved = self.driver.find_element_by_xpath('//a[contains(@href,"/saved/")]')
 
             if saved:
                 saved.click()
