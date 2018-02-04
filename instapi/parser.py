@@ -55,10 +55,14 @@ class Parser:
             if profile:
                 profile.click()
 
+            sleep(30)
+
             saved = self.driver.find_element_by_xpath('//a[contains(string(),"SAVED")]')
 
             if saved:
                 saved.click()
+
+            sleep(30)
 
             self.scroll_to_bottom()
 
@@ -96,12 +100,14 @@ class Parser:
             #
             #     self.images.append(image)
 
+            return True
         except Exception as e:
             traceback.print_exc()
 
             if self.driver:
                 self.driver.save_screenshot('screenshot.png')
 
+            return False
         finally:
             if self.driver:
                 self.driver.close()
