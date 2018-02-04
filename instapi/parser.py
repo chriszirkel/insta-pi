@@ -28,7 +28,7 @@ class Parser:
             self.driver = webdriver.Firefox()
 
             #self.driver.set_window_size(1920, 1080)
-            self.driver.implicitly_wait(10)
+            self.driver.implicitly_wait(30)
             self.driver.get(self.url)
 
             if not os.path.exists(self.dir):
