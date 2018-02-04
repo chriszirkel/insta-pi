@@ -27,8 +27,8 @@ class Parser:
             profile.set_preference('intl.accept_languages', 'en')
             self.driver = webdriver.Firefox()
 
-            self.driver.set_window_size(1920, 1080)
-            self.driver.implicitly_wait(5)
+            #self.driver.set_window_size(1920, 1080)
+            self.driver.implicitly_wait(10)
             self.driver.get(self.url)
 
             if not os.path.exists(self.dir):
@@ -107,7 +107,7 @@ class Parser:
                 self.driver.close()
 
     def scroll_to_bottom(self):
-        SCROLL_PAUSE_TIME = 2
+        SCROLL_PAUSE_TIME = 5
 
         # Get scroll height
         last_height = self.driver.execute_script("return document.body.scrollHeight")
