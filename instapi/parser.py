@@ -6,26 +6,28 @@ import traceback
 
 
 class Parser:
-    def __init__(self, url, dir, username, password):
+    def __init__(self, url, dir, username, password, browser):
         self.url = url
         self.dir = dir
         self.username = username
         self.password = password
+        self.browser = browser
         self.driver = None
 
     def parse(self):
         print('parse instagram')
         try:
-            webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.Accept-Language'] = 'en-US'
-            self.driver = webdriver.PhantomJS()
-
-            # options = webdriver.ChromeOptions()
-            # options.add_argument('--lang=en')
-            # self.driver = webdriver.Chrome(chrome_options=options)
-
-            #profile = webdriver.FirefoxProfile()
-            #profile.set_preference('intl.accept_languages', 'en')
-            #self.driver = webdriver.Firefox()
+            if self.browser == 'Firefox':
+                profile = webdriver.FirefoxProfile()
+                profile.set_preference('intl.accept_languages', 'en')
+                self.driver = webdriver.Firefox()
+            elif self.browser == 'Chrome':
+                options = webdriver.ChromeOptions()
+                options.add_argument('--lang=en')
+                self.driver = webdriver.Chrome(chrome_options=options)
+            else:
+                webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.Accept-Language'] = 'en-US'
+                self.driver = webdriver.PhantomJS()  # service_args=['--load-images=no']
 
             self.driver.set_window_size(800, 600)
             self.driver.implicitly_wait(30)
@@ -33,8 +35,6 @@ class Parser:
 
             if not os.path.exists(self.dir):
                 os.makedirs(self.dir, exist_ok=True)
-
-            files = os.listdir(self.dir)
 
             login = self.driver.find_element_by_xpath('//a[contains(text(),"Log in")]')
 
@@ -50,14 +50,14 @@ class Parser:
                 password.send_keys(self.password)
                 login.click()
 
-            sleep(30)
+            #sleep(30)
 
-            profile = self.driver.find_element_by_xpath('//a[contains(text(),"Profile")]')
+            profile = self.driver.find_element_by_xpath('//a[text() = "Profile"]')
 
             if profile:
                 profile.click()
 
-            sleep(30)
+            #sleep(30)
 
             #saved = self.driver.find_element_by_xpath('//a[contains(string(),"SAVED")]')
             saved = self.driver.find_element_by_xpath('//a[contains(@href,"/saved/")]')
@@ -65,43 +65,10 @@ class Parser:
             if saved:
                 saved.click()
 
-            sleep(30)
+            #sleep(30)
 
-            self.scroll_to_bottom()
-
-            images = self.driver.find_elements_by_xpath('//a[contains(@href,"?saved-by")]//img')
-
-            print('%d images found' % len(images))
-
-            for image in images:
-                src = image.get_attribute('src')
-                file = src.split('/')[-1]
-
-                if file in files:
-                    files.remove(file)
-                    continue
-
-                print('download image: %s' % src)
-                urllib.request.urlretrieve(src, os.path.join(self.dir, file))
-
-            for file in files:
-                print('delete image: %s' % file)
-                os.remove(os.path.join(self.dir, file))
-
-            # for image in saved_images:
-            #     href = image.get_attribute('href')
-            #     img = image.find_element_by_tag_name('img')
-            #     src = img.get_attribute('src')
-            #     id = re.search('\/p\/(.+)\/\?.+', href).group(1)
-            #
-            #     file = id + '.jpg'
-            #
-            #     image = {
-            #         'file':file,
-            #         'src':src
-            #     }
-            #
-            #     self.images.append(image)
+            images = self.search_images()
+            self.download_images(images)
 
             return True
         except Exception as e:
@@ -114,6 +81,60 @@ class Parser:
         finally:
             if self.driver:
                 self.driver.close()
+
+    def download_images(self, images):
+        files = os.listdir(self.dir)
+
+        for file, url in images.items():
+            if file in files:
+                files.remove(file)
+                continue
+
+            print('download image: %s' % url)
+            urllib.request.urlretrieve(url, os.path.join(self.dir, file))
+
+        for file in files:
+            print('delete image: %s' % file)
+            os.remove(os.path.join(self.dir, file))
+
+    def search_images(self):
+        images = {}
+
+        last_height = self.get_scroll_height()
+
+        while True:
+            img_tags = self.driver.find_elements_by_xpath('//a[contains(@href,"?saved-by")]//img')
+
+            for img in img_tags:
+                src = img.get_attribute('src')
+                file = src.split('/')[-1]
+
+                if file not in images:
+                    images[file] = src
+
+            # Calculate new scroll height and compare with last scroll height
+            new_height = self.scroll_down()
+
+            if new_height == last_height:
+                break
+            last_height = new_height
+
+        print('%d images found' % len(images))
+
+        return images
+
+    def scroll_down(self):
+        SCROLL_PAUSE_TIME = 5
+
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        # Wait to load page
+        sleep(SCROLL_PAUSE_TIME)
+
+        return self.get_scroll_height()
+
+    def get_scroll_height(self):
+        return self.driver.execute_script("return document.body.scrollHeight")
 
     def scroll_to_bottom(self):
         SCROLL_PAUSE_TIME = 5

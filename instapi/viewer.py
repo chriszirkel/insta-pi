@@ -2,21 +2,26 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import random
 import os
+import sys
 
 
-class Viewer:
-    def __init__(self, dir):
-        self.root = tk.Tk()
-        self.root.title('My Pictures')
-        self.root.attributes('-fullscreen', True)
-        self.root.configure(background='black')
+class Viewer(tk.Tk):
+    def __init__(self, dir, interval):
+        #self.root = tk.Tk()
+        tk.Tk.__init__(self)
+        self.title('My Pictures')
+        self.attributes('-fullscreen', True)
+        self.configure(background='black')
+        self.bind('<Escape>', self.close)
 
         self.dir = dir
+        # calculate microseconds
+        self.interval = interval * 1000
         self.images = []
         self.current_image = None
 
         # root has no image argument, so use a label as a panel
-        self.panel = tk.Label(self.root) #, image=self.image1
+        self.panel = tk.Label(self) #, image=self.image1
         self.panel.configure(background='black')
         self.panel.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.YES)
 
@@ -25,7 +30,11 @@ class Viewer:
 
         self.load_images()
         self.update_image()
-        self.root.mainloop()
+        self.mainloop()
+
+    def close(self, event):
+        self.destroy()
+        sys.exit()
 
     def load_images(self):
         self.images = os.listdir(self.dir)
@@ -40,6 +49,6 @@ class Viewer:
 
         self.current_image = ImageTk.PhotoImage(Image.open(os.path.join(self.dir, random_image)))
         self.panel.configure(image=self.current_image)
-        self.root.after(5000, self.update_image)
+        self.after(self.interval, self.update_image)
 
         print('update image: %s' % random_image)
