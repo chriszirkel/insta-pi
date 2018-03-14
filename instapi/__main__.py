@@ -7,7 +7,7 @@ from instapi import parser
 
 
 def view():
-    #viewer.after(10000, test)
+    viewer.after(10000, test)
     viewer.view()
 
 

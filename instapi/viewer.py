@@ -7,7 +7,6 @@ import sys
 
 class Viewer(tk.Tk):
     def __init__(self, dir, interval):
-        #self.root = tk.Tk()
         tk.Tk.__init__(self)
         self.title('My Pictures')
         self.attributes('-fullscreen', True)
@@ -22,8 +21,7 @@ class Viewer(tk.Tk):
         self.images = []
         self.current_image = None
 
-        # root has no image argument, so use a label as a panel
-        self.panel = tk.Label(self) #, image=self.image1
+        self.panel = tk.Label(self)
         self.panel.configure(background='black')
         self.panel.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.YES)
 
@@ -39,6 +37,8 @@ class Viewer(tk.Tk):
         sys.exit()
 
     def load_images(self):
+        print('load images')
+
         self.images = os.listdir(self.dir)
 
         print('%d images loaded' % len(self.images))
