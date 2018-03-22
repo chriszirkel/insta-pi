@@ -6,19 +6,9 @@ from instapi import viewer
 from instapi import parser
 
 
-def view():
-    viewer.after(10000, test)
-    viewer.view()
-
-
-def parse():
+def continuous_parse():
+    viewer.after(86400, continuous_parse)
     parser.parse()
-    #threading.Timer(3600, parse).start()
-
-
-def test():
-    print('test')
-    #viewer.after(10000, test)
 
 
 if __name__ == '__main__':
@@ -37,6 +27,6 @@ if __name__ == '__main__':
     parser = parser.Parser(url='https://www.instagram.com', dir=args.directory, username=args.username, password=args.password, browser=args.browser)
     viewer = viewer.Viewer(dir=args.directory, interval=args.interval)
 
-    parser.parse()
+    continuous_parse
     viewer.view()
 
