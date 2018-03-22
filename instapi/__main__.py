@@ -7,7 +7,7 @@ from instapi import parser
 
 
 def continuous_parse():
-    viewer.after(86400, continuous_parse)
+    viewer.after(86400*1000, continuous_parse)
     parser.parse()
 
 
