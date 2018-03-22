@@ -27,6 +27,6 @@ if __name__ == '__main__':
     parser = parser.Parser(url='https://www.instagram.com', dir=args.directory, username=args.username, password=args.password, browser=args.browser)
     viewer = viewer.Viewer(dir=args.directory, interval=args.interval)
 
-    continuous_parse
+    continuous_parse()
     viewer.view()
 
